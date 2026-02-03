@@ -41,5 +41,6 @@ luac.out
 
 # Misc
 build64
+doc
 *.*~
 

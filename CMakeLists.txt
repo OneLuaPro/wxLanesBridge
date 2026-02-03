@@ -141,13 +141,12 @@ install(TARGETS wxLanesBridge RUNTIME DESTINATION ${INSTALL_TOP_CDIR})
 
 # ------------------------------------------------------------------------------
 # Create docs with ldoc from CMAKE_INSTALL_PREFIX
-set(LUA_EXE "${CMAKE_INSTALL_PREFIX}/bin/lua.exe")
-set(LDOC_LUA "${CMAKE_INSTALL_PREFIX}/bin/ldoc.lua")
+set(LDOC_EXE "${CMAKE_INSTALL_PREFIX}/bin/ldoc.exe")
 set(DOC_INST_DIR "${CMAKE_CURRENT_BINARY_DIR}/gen-docs")
 add_custom_target(docs
   COMMENT "Generate documentation ..."
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-  COMMAND ${LUA_EXE} ${LDOC_LUA} . -d "${DOC_INST_DIR}"
+  COMMAND ${LDOC_EXE} . -d "${DOC_INST_DIR}"
 )
 add_dependencies(wxLanesBridge docs)
 
