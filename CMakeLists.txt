@@ -116,26 +116,25 @@ message(STATUS "C++ compiler flags: ${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_${CMAKE
 add_library(wxLanesBridge SHARED)
 # setup lua include directory
 target_include_directories(wxLanesBridge PRIVATE ${LIBLUA_INCLUDEDIR} ${LIBLUA_INCLUDEDIR}/msvc)
+# plattform-independend sources
+target_sources(wxLanesBridge PRIVATE src/wxLanesBridge.cpp)
 # setup platform-specific sources, compile and linker options
 if(WIN32 AND NOT MinGW)
   # Important definitions for DLL and symbol export
-  add_definitions(-DLUA_BUILD_AS_DLL -DLUA_LIB)
-  # set deviating library output name
-  #set_target_properties(wxLanesBridge PROPERTIES PREFIX "")
-  #set_target_properties(wxLanesBridge PROPERTIES OUTPUT_NAME core)
-  # Compile options
   target_compile_definitions(wxLanesBridge PRIVATE
+    LUA_BUILD_AS_DLL LUA_LIB
     _WINDLL _WIN32 _CRT_SECURE_NO_WARNINGS
     UNICODE _UNICODE __WXMSW__
   )
   # We silently assume all libs are available with headers and static lib
-  target_link_options(wxLanesBridge PRIVATE /LIBPATH:${LIBLUA_LIBDIR} liblua.lib
-    wx.lib /LIBPATH:${LIBLUA_LIBDIR}/vc_x64_lib wxbase32u.lib)
+  target_link_directories(wxLanesBridge PRIVATE
+    ${LIBLUA_LIBDIR}
+    ${LIBLUA_LIBDIR}/vc_x64_lib
+  )
+  target_link_libraries(wxLanesBridge PRIVATE liblua wx wxbase32u)
 else()
   message(FATAL_ERROR "Not yet fully implemented.")
 endif()
-# plattform-independend sources
-target_sources(wxLanesBridge PRIVATE src/wxLanesBridge.cpp)
 # Install
 install(TARGETS wxLanesBridge RUNTIME DESTINATION ${INSTALL_TOP_CDIR})
 
